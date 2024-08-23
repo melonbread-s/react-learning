@@ -1,9 +1,10 @@
 'use client';
 import React, { useState, useEffect } from 'react';
+//Download API parts
 import { collection, addDoc, getDoc, querySnapshot, query, onSnapshot, deleteDoc, DocumentReference, } from "firebase/firestore"; 
 import {db} from './firebase'
 
-
+//export as default by using 'export default', but in Next.js, this is used to show main component
 export default function Home() {
   const [items, setItems] = useState([
     //{ name: 'Coffee', price: 4.95 },
@@ -22,11 +23,12 @@ export default function Home() {
         name: newItem.name.trim(),
         price: newItem.price,
        });
+       //reset newItem
        setNewItem({ name: '', price: ''}); 
     }
   };
 
-  //Item getting
+  //Item getting, using 'useEffect' to avoid side-effect
   useEffect(() => {
     const q = query(collection(db, 'items'));
     const unsubscribe = onSnapshot(q, (querySnapshot) => {
@@ -36,7 +38,6 @@ export default function Home() {
         itemsArr.push({...doc.data(), id: doc.id});
       });
       setItems(itemsArr);
-
 
       //read total from itemsArr
       const calculateTotal = () => {
